@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\DAO\CategoriaDAO;
 use App\Model\Categoria;
-use App\Service\CategoriaService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 

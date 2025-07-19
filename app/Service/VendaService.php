@@ -21,7 +21,7 @@ class VendaService {
     }
 
     public function criar(array $data): bool {
-        $categoria = new Venda($data);
+        $venda = new Venda($data);
         return $this->dao->inserir($venda);
     }
 
