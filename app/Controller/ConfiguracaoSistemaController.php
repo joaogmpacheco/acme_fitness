@@ -8,10 +8,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class ConfiguracaoSistemaController {
 
-    private ConfiguracaoSistemaService $clienteService;
+    private ConfiguracaoSistemaService $configuracaoSistemaService;
 
-    public function __construct(ConfiguracaoSistemaService $clienteService) {
-        $this->configuracaoSistemaService = $clienteService;
+    public function __construct(ConfiguracaoSistemaService $configuracaoSistemaService) {
+        $this->configuracaoSistemaService = $configuracaoSistemaService;
     }
 
     public function listar(Request $request, Response $response): Response {
@@ -29,7 +29,7 @@ class ConfiguracaoSistemaController {
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
-        $response->getBody()->write(json_encode($cliente));
+        $response->getBody()->write(json_encode($configuracaoSistema));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
