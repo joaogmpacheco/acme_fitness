@@ -2,43 +2,43 @@
 
 namespace App\Controller;
 
-use App\DAO\ConfiguracaoSistemaDAO;
-use App\Model\ConfiguracaoSistema;
+use App\Service\ConfiguracaoSistemaService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class ConfiguracaoSistemaController {
 
+    private ConfiguracaoSistemaService $clienteService;
+
+    public function __construct(ConfiguracaoSistemaService $clienteService) {
+        $this->configuracaoSistemaService = $clienteService;
+    }
+
     public function listar(Request $request, Response $response): Response {
-        $dao = new ConfiguracaoSistemaDAO();
-        $configuracaoSistema = $dao->listar();
-        $response->getBody()->write(json_encode($configuracaoSistema));
+        $configuracaoSistemas = $this->configuracaoSistemaService->listar();
+        $response->getBody()->write(json_encode($configuracaoSistemas));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function buscarPorId(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
-        $dao = new ConfiguracaoSistemaDAO();
-        $configuracaoSistema = $dao->listarPorId($id);
+        $configuracaoSistema = $this->configuracaoSistemaService->listarPorId($id);
 
         if (!$configuracaoSistema) {
-            $response->getBody()->write(json_encode(['erro' => 'Configuração Sistema não encontrado']));
+            $response->getBody()->write(json_encode(['erro' => 'ConfiguracaoSistema não encontrado']));
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
-        $response->getBody()->write(json_encode($configuracaoSistema));
+        $response->getBody()->write(json_encode($cliente));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function criar(Request $request, Response $response): Response {
         $data = $request->getParsedBody();
-        $configuracaoSistema = new ConfiguracaoSistema($data);
-
-        $dao = new ConfiguracaoSistemaDAO();
-        $sucesso = $dao->inserir($configuracaoSistema);
+        $sucesso = $this->configuracaoSistemaService->criar($data);
 
         $status = $sucesso ? 201 : 500;
-        $mensagem = $sucesso ? ['mensagem' => 'Configuração Sistema criado com sucesso'] : ['erro' => 'Erro ao criar configuracaoSistema'];
+        $mensagem = $sucesso ? ['mensagem' => 'ConfiguracaoSistema criado com sucesso'] : ['erro' => 'Erro ao criar configuracaoSistema'];
 
         $response->getBody()->write(json_encode($mensagem));
         return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
@@ -48,13 +48,9 @@ class ConfiguracaoSistemaController {
         $id = (int) $args['id'];
         $data = $request->getParsedBody();
 
-        $configuracaoSistema = new ConfiguracaoSistema($data);
-        $configuracaoSistema->setId($id);
+        $sucesso = $this->configuracaoSistemaService->atualizar($id, $data);
 
-        $dao = new ConfiguracaoSistemaDAO();
-        $sucesso = $dao->atualizar($configuracaoSistema);
-
-        $mensagem = $sucesso ? ['mensagem' => 'Configuração Sistema atualizado com sucesso'] : ['erro' => 'Erro ao atualizar configuracaoSistema'];
+        $mensagem = $sucesso ? ['mensagem' => 'ConfiguracaoSistema atualizado com sucesso'] : ['erro' => 'Erro ao atualizar configuracaoSistema'];
         $status = $sucesso ? 200 : 500;
 
         $response->getBody()->write(json_encode($mensagem));
@@ -63,11 +59,9 @@ class ConfiguracaoSistemaController {
 
     public function deletar(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
+        $sucesso = $this->configuracaoSistemaService->deletar($id);
 
-        $dao = new ConfiguracaoSistemaDAO();
-        $sucesso = $dao->deletar($id);
-
-        $mensagem = $sucesso ? ['mensagem' => 'Configuracao Sistema deletado com sucesso'] : ['erro' => 'Erro ao deletar configuracaoSistema'];
+        $mensagem = $sucesso ? ['mensagem' => 'ConfiguracaoSistema deletado com sucesso'] : ['erro' => 'Erro ao deletar configuracaoSistema'];
         $status = $sucesso ? 200 : 500;
 
         $response->getBody()->write(json_encode($mensagem));
