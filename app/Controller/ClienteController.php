@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Model\Cliente;
 use App\Service\ClienteService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,8 +10,8 @@ class ClienteController {
 
     private ClienteService $clienteService;
 
-    public function __construct() {
-        $this->clienteService = new ClienteService();
+    public function __construct(ClienteService $clienteService) {
+        $this->clienteService = $clienteService;
     }
 
     public function listar(Request $request, Response $response): Response {
