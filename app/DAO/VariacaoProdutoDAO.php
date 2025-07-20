@@ -23,7 +23,7 @@ class VariacaoProdutoDAO {
         return $variacaoProduto;
     }
 
-    public function ListarPorId(int $id): ?VariacaoProduto {
+    public function listarPorId(int $id): ?VariacaoProduto {
         $stmt = $this->pdo->prepare("SELECT * FROM variacaoProduto WHERE id = ?");
         $stmt->execute([$id]);
 

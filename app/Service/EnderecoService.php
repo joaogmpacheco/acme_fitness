@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Service;
 
 use App\DAO\EnderecoDAO;
@@ -8,8 +7,8 @@ use App\Model\Endereco;
 class EnderecoService {
     private EnderecoDAO $dao;
 
-    public function __construct() {
-        $this->dao = new EnderecoDAO();
+    public function __construct(EnderecoDAO $dao) {
+        $this->dao = $dao;
     }
 
     public function listar(): array {
@@ -27,7 +26,7 @@ class EnderecoService {
 
     public function atualizar(int $id, array $data): bool {
         $endereco = new Endereco($data);
-        $endereco->setId($id); // garante que o ID esteja setado
+        $endereco->setId($id);
         return $this->dao->atualizar($endereco);
     }
 
@@ -35,3 +34,4 @@ class EnderecoService {
         return $this->dao->deletar($id);
     }
 }
+

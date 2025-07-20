@@ -23,7 +23,7 @@ class ClienteDAO {
         return $cliente;
     }
 
-    public function ListarPorId(int $id): ?Cliente {
+    public function listarPorId(int $id): ?Cliente {
         $stmt = $this->pdo->prepare("SELECT * FROM cliente WHERE id = ?");
         $stmt->execute([$id]);
 

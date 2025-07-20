@@ -27,6 +27,10 @@ class ConfiguracaoSistema implements JsonSerializable{
         $this->id = $data['id'] ?? null;
         $this->setValorFretePadrao((float)($data['valorFretePadrao'] ?? 0));
     }
+
+    public function jsonSerialize(){
+        return $this->toArray();
+    }
     public function toArray(): array {
         return [
             'id'    => $this->id,

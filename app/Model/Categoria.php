@@ -19,7 +19,7 @@ class Categoria implements JsonSerializable{
     public function getDescricao(){
         return $this->descricao;
     }
-    
+
     /*Setters*/
     public function setId(int $id){
         $this->id = $id;

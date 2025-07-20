@@ -23,7 +23,7 @@ class ConfiguracaoSistemaDAO {
         return $configuracaoSistema;
     }
 
-    public function ListarPorId(int $id): ?ConfiguracaoSistema {
+    public function listarPorId(int $id): ?ConfiguracaoSistema {
         $stmt = $this->pdo->prepare("SELECT * FROM configuracaoSistema WHERE id = ?");
         $stmt->execute([$id]);
 

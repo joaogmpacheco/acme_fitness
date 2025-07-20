@@ -92,6 +92,9 @@ class Produto implements JsonSerializable{
         }
         $this->categoria_id = $categoria_id;
     }
+    public function jsonSerialize(){
+        return $this->toArray();
+    }
 
     public function toArray(): array {
         return [

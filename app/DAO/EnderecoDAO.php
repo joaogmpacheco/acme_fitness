@@ -23,7 +23,7 @@ class EnderecoDAO {
         return $endereco;
     }
 
-    public function searchById(int $id): ?Endereco {
+    public function listarPorId(int $id): ?Endereco {
         $stmt = $this->pdo->prepare("SELECT * FROM endereco WHERE id = ?");
         $stmt->execute([$id]);
 

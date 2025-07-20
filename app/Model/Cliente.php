@@ -45,6 +45,10 @@ class Cliente implements JsonSerializable{
         }
     }
 
+    public function jsonSerialize(){
+        return $this->toArray();
+    }
+
     public function toArray(): array {
         return [
             'id'    => $this->id,
