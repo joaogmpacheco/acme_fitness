@@ -7,8 +7,6 @@ use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
-use PDO;
-use PDOException;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
@@ -46,17 +44,16 @@ $middleware = require __DIR__ . '/../app/middleware.php';
 $middleware($app);
 
 // Register routes
-$routes = require __DIR__ . '/../app/routes.php';
-$routes = require __DIR__ . '/../app/routes/categoria.php';
-$routes = require __DIR__ . '/../app/routes/cliente.php';
-$routes = require __DIR__ . '/../app/routes/configuracaoSistema.php';
-$routes = require __DIR__ . '/../app/routes/endereco.php';
-$routes = require __DIR__ . '/../app/routes/itemVenda.php';
-$routes = require __DIR__ . '/../app/routes/produto.php';
-$routes = require __DIR__ . '/../app/routes/variacaoProduto.php';
-$routes = require __DIR__ . '/../app/routes/venda.php';
+(require __DIR__ . '/../app/routes.php')($app);
+(require __DIR__ . '/../app/routes/categoria.php')($app);
+(require __DIR__ . '/../app/routes/cliente.php')($app);
+(require __DIR__ . '/../app/routes/configuracaoSistema.php')($app);
+(require __DIR__ . '/../app/routes/endereco.php')($app);
+(require __DIR__ . '/../app/routes/itemVenda.php')($app);
+(require __DIR__ . '/../app/routes/produto.php')($app);
+(require __DIR__ . '/../app/routes/variacaoProduto.php')($app);
+(require __DIR__ . '/../app/routes/venda.php')($app);
 
-$routes($app);
 
 /** @var SettingsInterface $settings */
 $settings = $container->get(SettingsInterface::class);
