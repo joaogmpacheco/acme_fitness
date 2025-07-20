@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Service;
 
 use App\DAO\ClienteDAO;
@@ -8,8 +7,8 @@ use App\Model\Cliente;
 class ClienteService {
     private ClienteDAO $dao;
 
-    public function __construct() {
-        $this->dao = new ClienteDAO();
+    public function __construct(ClienteDAO $dao) {
+        $this->dao = $dao;
     }
 
     public function listar(): array {
@@ -27,7 +26,7 @@ class ClienteService {
 
     public function atualizar(int $id, array $data): bool {
         $cliente = new Cliente($data);
-        $cliente->setId($id); // garante que o ID esteja setado
+        $cliente->setId($id);
         return $this->dao->atualizar($cliente);
     }
 
@@ -35,3 +34,4 @@ class ClienteService {
         return $this->dao->deletar($id);
     }
 }
+
