@@ -1,11 +1,15 @@
 <?php
 
+use Slim\App;
+use Slim\Routing\RouteCollectorProxy;
 use App\Controller\ItemVendaController;
 
-$app->group('/itemVenda', function () {
-    $this->get('', ItemVendaController::class . ':listar'); // GET /itemVenda
-    $this->get('/{id}', ItemVendaController::class . ':listarPorId'); // GET /itemVenda/{id}
-    $this->post('', ItemVendaController::class . ':criar'); // POST /itemVenda
-    $this->put('/{id}', ItemVendaController::class . ':atualizar');  // PUT /itemVenda/{id}
-    $this->delete('/{id}', ItemVendaController::class . ':deletar'); // DELETE /itemVenda/{id}
-});
+return function (App $app) {
+    $app->group('/itemVenda', function (RouteCollectorProxy $group) {
+        $group->get('', [ItemVendaController::class, 'listar']);
+        $group->get('/{id}', [ItemVendaController::class, 'buscarPorId']);
+        $group->post('', [ItemVendaController::class, 'criar']);
+        $group->put('/{id}', [ItemVendaController::class, 'atualizar']);
+        $group->delete('/{id}', [ItemVendaController::class, 'deletar']);
+    });
+};
