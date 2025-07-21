@@ -1,11 +1,14 @@
 <?php
 
+use Slim\App;
 use App\Controller\CategoriaController;
 
-$app->group('/categoria', function () {
-    $this->get('', CategoriaController::class . ':listar'); // GET /categoria
-    $this->get('/{id}', CategoriaController::class . ':listarPorId'); // GET /categoria/{id}
-    $this->post('', CategoriaController::class . ':criar'); // POST /categoria
-    $this->put('/{id}', CategoriaController::class . ':atualizar');  // PUT /categoria/{id}
-    $this->delete('/{id}', CategoriaController::class . ':deletar'); // DELETE /categoria/{id}
-});
+return function (App $app) {
+    $app->group('/categoria', function ($group) {
+        $group->get('', [CategoriaController::class, 'listar']);
+        $group->get('/{id}', [CategoriaController::class, 'buscarPorId']);
+        $group->post('', [CategoriaController::class, 'inserir']);
+        $group->put('/{id}', [CategoriaController::class, 'atualizar']);
+        $group->delete('/{id}', [CategoriaController::class, 'deletar']);
+    });
+};
