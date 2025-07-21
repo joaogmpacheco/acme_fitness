@@ -2,43 +2,43 @@
 
 namespace App\Controller;
 
-use App\DAO\VariacaoProdutoDAO;
-use App\Model\VariacaoProduto;
+use App\Service\VariacaoProdutoService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class VariacaoProdutoController {
 
+    private VariacaoProdutoService $variacaoprodutoService;
+
+    public function __construct(VariacaoProdutoService $variacaoprodutoService) {
+        $this->variacaoProdutoService = $variacaoprodutoService;
+    }
+
     public function listar(Request $request, Response $response): Response {
-        $dao = new VariacaoProdutoDAO();
-        $variacaoProduto = $dao->listar();
-        $response->getBody()->write(json_encode($variacaoProduto));
+        $variacaoproduto = $this->variacaoProdutoService->listar();
+        $response->getBody()->write(json_encode($variacaoproduto));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function buscarPorId(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
-        $dao = new VariacaoProdutoDAO();
-        $variacaoProduto = $dao->listarPorId($id);
+        $variacaoproduto = $this->variacaoprodutoService->listarPorId($id);
 
-        if (!$variacaoProduto) {
-            $response->getBody()->write(json_encode(['erro' => 'Variacao Produto não encontrado']));
+        if (!$variacaoproduto) {
+            $response->getBody()->write(json_encode(['erro' => 'Produto não encontrado']));
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
-        $response->getBody()->write(json_encode($variacaoProduto));
+        $response->getBody()->write(json_encode($variacaoproduto));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function criar(Request $request, Response $response): Response {
         $data = $request->getParsedBody();
-        $variacaoProduto = new VariacaoProduto($data);
-
-        $dao = new VariacaoProdutoDAO();
-        $sucesso = $dao->inserir($variacaoProduto);
+        $sucesso = $this->variacaoprodutoService->criar($data);
 
         $status = $sucesso ? 201 : 500;
-        $mensagem = $sucesso ? ['mensagem' => 'Variacao Produto criado com sucesso'] : ['erro' => 'Erro ao criar variacaoProduto'];
+        $mensagem = $sucesso ? ['mensagem' => 'Produto criado com sucesso'] : ['erro' => 'Erro ao criar produto'];
 
         $response->getBody()->write(json_encode($mensagem));
         return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
@@ -48,13 +48,9 @@ class VariacaoProdutoController {
         $id = (int) $args['id'];
         $data = $request->getParsedBody();
 
-        $variacaoProduto = new VariacaoProduto($data);
-        $variacaoProduto->setId($id);
+        $sucesso = $this->variacaoprodutoService->atualizar($id, $data);
 
-        $dao = new VariacaoProdutoDAO();
-        $sucesso = $dao->atualizar($variacaoProduto);
-
-        $mensagem = $sucesso ? ['mensagem' => 'Variacao Produto atualizado com sucesso'] : ['erro' => 'Erro ao atualizar variacaoProduto'];
+        $mensagem = $sucesso ? ['mensagem' => 'Produto atualizado com sucesso'] : ['erro' => 'Erro ao atualizar produto'];
         $status = $sucesso ? 200 : 500;
 
         $response->getBody()->write(json_encode($mensagem));
@@ -63,11 +59,9 @@ class VariacaoProdutoController {
 
     public function deletar(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
+        $sucesso = $this->produtoService->deletar($id);
 
-        $dao = new VariacaoProdutoDAO();
-        $sucesso = $dao->deletar($id);
-
-        $mensagem = $sucesso ? ['mensagem' => 'Variacao Produto deletado com sucesso'] : ['erro' => 'Erro ao deletar variacaoProduto'];
+        $mensagem = $sucesso ? ['mensagem' => 'Endereco deletado com sucesso'] : ['erro' => 'Erro ao deletar produto'];
         $status = $sucesso ? 200 : 500;
 
         $response->getBody()->write(json_encode($mensagem));
