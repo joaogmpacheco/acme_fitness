@@ -1,11 +1,15 @@
 <?php
 
+use Slim\App;
+use Slim\Routing\RouteCollectorProxy;
 use App\Controller\ConfiguracaoSistemaController;
 
-$app->group('/configuracaoSistema', function () {
-    $this->get('', ConfiguracaoSistemaController::class . ':listar'); // GET /configuracaoSistema
-    $this->get('/{id}', ConfiguracaoSistemaController::class . ':listarPorId'); // GET /configuracaoSistema/{id}
-    $this->post('', ConfiguracaoSistemaController::class . ':criar'); // POST /configuracaoSistema
-    $this->put('/{id}', ConfiguracaoSistemaController::class . ':atualizar');  // PUT /configuracaoSistema/{id}
-    $this->delete('/{id}', ConfiguracaoSistemaController::class . ':deletar'); // DELETE /configuracaoSistema/{id}
-});
+return function (App $app) {
+    $app->group('/configuracaoSistema', function (RouteCollectorProxy $group) {
+        $group->get('', [ConfiguracaoSistemaController::class, 'listar']);
+        $group->get('/{id}', [ConfiguracaoSistemaController::class, 'buscarPorId']);
+        $group->post('', [ConfiguracaoSistemaController::class, 'criar']);
+        $group->put('/{id}', [ConfiguracaoSistemaController::class, 'atualizar']);
+        $group->delete('/{id}', [ConfiguracaoSistemaController::class, 'deletar']);
+    });
+};
