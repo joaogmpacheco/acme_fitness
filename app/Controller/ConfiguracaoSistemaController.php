@@ -25,7 +25,7 @@ class ConfiguracaoSistemaController {
         $configuracaoSistema = $this->configuracaoSistemaService->listarPorId($id);
 
         if (!$configuracaoSistema) {
-            $response->getBody()->write(json_encode(['erro' => 'ConfiguracaoSistema não encontrado']));
+            $response->getBody()->write(json_encode(['erro' => 'Configuração Sistema não encontrado']));
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
@@ -38,7 +38,7 @@ class ConfiguracaoSistemaController {
         $sucesso = $this->configuracaoSistemaService->criar($data);
 
         $status = $sucesso ? 201 : 500;
-        $mensagem = $sucesso ? ['mensagem' => 'ConfiguracaoSistema criado com sucesso'] : ['erro' => 'Erro ao criar configuracaoSistema'];
+        $mensagem = $sucesso ? ['mensagem' => 'Configuração Sistema criado com sucesso'] : ['erro' => 'Erro ao criar configuração sistema'];
 
         $response->getBody()->write(json_encode($mensagem));
         return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
@@ -50,7 +50,7 @@ class ConfiguracaoSistemaController {
 
         $sucesso = $this->configuracaoSistemaService->atualizar($id, $data);
 
-        $mensagem = $sucesso ? ['mensagem' => 'ConfiguracaoSistema atualizado com sucesso'] : ['erro' => 'Erro ao atualizar configuracaoSistema'];
+        $mensagem = $sucesso ? ['mensagem' => 'Configuração Sistema atualizado com sucesso'] : ['erro' => 'Erro ao atualizar configuração sistema'];
         $status = $sucesso ? 200 : 500;
 
         $response->getBody()->write(json_encode($mensagem));
@@ -61,7 +61,7 @@ class ConfiguracaoSistemaController {
         $id = (int) $args['id'];
         $sucesso = $this->configuracaoSistemaService->deletar($id);
 
-        $mensagem = $sucesso ? ['mensagem' => 'ConfiguracaoSistema deletado com sucesso'] : ['erro' => 'Erro ao deletar configuracaoSistema'];
+        $mensagem = $sucesso ? ['mensagem' => 'Configuração Sistema deletado com sucesso'] : ['erro' => 'Erro ao deletar configuração sistema'];
         $status = $sucesso ? 200 : 500;
 
         $response->getBody()->write(json_encode($mensagem));
