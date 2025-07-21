@@ -15,8 +15,8 @@ class ConfiguracaoSistemaController {
     }
 
     public function listar(Request $request, Response $response): Response {
-        $configuracaoSistemas = $this->configuracaoSistemaService->listar();
-        $response->getBody()->write(json_encode($configuracaoSistemas));
+        $configuracaoSistema = $this->configuracaoSistemaService->listar();
+        $response->getBody()->write(json_encode($configuracaoSistema));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
