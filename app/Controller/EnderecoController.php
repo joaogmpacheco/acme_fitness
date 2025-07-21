@@ -2,24 +2,27 @@
 
 namespace App\Controller;
 
-use App\DAO\EnderecoDAO;
-use App\Model\Endereco;
+use App\Service\EnderecoService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class EnderecoController {
 
+    private EnderecoService $enderecoService;
+
+    public function __construct(EnderecoService $enderecoService) {
+        $this->enderecoService = $enderecoService;
+    }
+
     public function listar(Request $request, Response $response): Response {
-        $dao = new EnderecoDAO();
-        $endereco = $dao->listar();
+        $endereco = $this->enderecoService->listar();
         $response->getBody()->write(json_encode($endereco));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function buscarPorId(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
-        $dao = new EnderecoDAO();
-        $endereco = $dao->listarPorId($id);
+        $endereco = $this->enderecoService->listarPorId($id);
 
         if (!$endereco) {
             $response->getBody()->write(json_encode(['erro' => 'Endereco não encontrado']));
@@ -32,10 +35,7 @@ class EnderecoController {
 
     public function criar(Request $request, Response $response): Response {
         $data = $request->getParsedBody();
-        $endereco = new Endereco($data);
-
-        $dao = new EnderecoDAO();
-        $sucesso = $dao->inserir($endereco);
+        $sucesso = $this->enderecoService->criar($data);
 
         $status = $sucesso ? 201 : 500;
         $mensagem = $sucesso ? ['mensagem' => 'Endereco criado com sucesso'] : ['erro' => 'Erro ao criar endereco'];
@@ -48,11 +48,7 @@ class EnderecoController {
         $id = (int) $args['id'];
         $data = $request->getParsedBody();
 
-        $endereco = new Endereco($data);
-        $endereco->setId($id);
-
-        $dao = new EnderecoDAO();
-        $sucesso = $dao->atualizar($endereco);
+        $sucesso = $this->enderecoService->atualizar($id, $data);
 
         $mensagem = $sucesso ? ['mensagem' => 'Endereco atualizado com sucesso'] : ['erro' => 'Erro ao atualizar endereco'];
         $status = $sucesso ? 200 : 500;
@@ -63,9 +59,7 @@ class EnderecoController {
 
     public function deletar(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
-
-        $dao = new EnderecoDAO();
-        $sucesso = $dao->deletar($id);
+        $sucesso = $this->enderecoService->deletar($id);
 
         $mensagem = $sucesso ? ['mensagem' => 'Endereco deletado com sucesso'] : ['erro' => 'Erro ao deletar endereco'];
         $status = $sucesso ? 200 : 500;
