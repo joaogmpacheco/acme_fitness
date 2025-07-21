@@ -1,14 +1,15 @@
 <?php
 
 namespace App\DAO;
+use App\Database\Connection;
 use App\Model\Endereco;
 use PDO;
 
 class EnderecoDAO {
     private PDO $pdo;
 
-    public function __construct(PDO $pdo) {
-        $this->pdo = $pdo;
+    public function __construct() {
+        $this->pdo = Connection::get();
     }
 
     public function listar(): array {

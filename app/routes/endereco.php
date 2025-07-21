@@ -1,15 +1,11 @@
 <?php
 
-use Slim\App;
-use Slim\Routing\RouteCollectorProxy;
 use App\Controller\EnderecoController;
 
-return function (App $app) {
-    $app->group('/endereco', function (RouteCollectorProxy $group) {
-        $group->get('', [EnderecoController::class, 'listar']);
-        $group->get('/{id}', [EnderecoController::class, 'buscarPorId']);
-        $group->post('', [EnderecoController::class, 'criar']);
-        $group->put('/{id}', [EnderecoController::class, 'atualizar']);
-        $group->delete('/{id}', [EnderecoController::class, 'deletar']);
-    });
-};
+$app->group('/endereco', function () {
+    $this->get('', EnderecoController::class . ':listar');         // GET /endereco
+    $this->get('/{id}', EnderecoController::class . ':listarPorId'); // GET /endereco/{id}
+    $this->post('', EnderecoController::class . ':criar');          // POST /endereco
+    $this->put('/{id}', EnderecoController::class . ':atualizar');  // PUT /endereco/{id}
+    $this->delete('/{id}', EnderecoController::class . ':deletar'); // DELETE /endereco/{id}
+});

@@ -38,7 +38,7 @@ class ItemVendaController {
         $sucesso = $this->itemVendaService->criar($data);
 
         $status = $sucesso ? 201 : 500;
-        $mensagem = $sucesso ? ['mensagem' => 'Item Venda criado com sucesso'] : ['erro' => 'Erro ao criar itemVenda'];
+        $mensagem = $sucesso ? ['mensagem' => 'Endereco criado com sucesso'] : ['erro' => 'Erro ao criar itemVenda'];
 
         $response->getBody()->write(json_encode($mensagem));
         return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
@@ -50,7 +50,7 @@ class ItemVendaController {
 
         $sucesso = $this->itemVendaService->atualizar($id, $data);
 
-        $mensagem = $sucesso ? ['mensagem' => 'Item Venda atualizado com sucesso'] : ['erro' => 'Erro ao atualizar itemVenda'];
+        $mensagem = $sucesso ? ['mensagem' => 'Endereco atualizado com sucesso'] : ['erro' => 'Erro ao atualizar itemVenda'];
         $status = $sucesso ? 200 : 500;
 
         $response->getBody()->write(json_encode($mensagem));

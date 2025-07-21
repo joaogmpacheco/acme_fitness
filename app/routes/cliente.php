@@ -1,15 +1,11 @@
 <?php
 
-use Slim\App;
-use Slim\Routing\RouteCollectorProxy;
 use App\Controller\ClienteController;
 
-return function (App $app) {
-    $app->group('/cliente', function (RouteCollectorProxy $group) {
-        $group->get('', [ClienteController::class, 'listar']);
-        $group->get('/{id}', [ClienteController::class, 'buscarPorId']);
-        $group->post('', [ClienteController::class, 'criar']);
-        $group->put('/{id}', [ClienteController::class, 'atualizar']);
-        $group->delete('/{id}', [ClienteController::class, 'deletar']);
-    });
-};
+$app->group('/cliente', function () {
+    $this->get('', ClienteController::class . ':listar'); // GET /cliente
+    $this->get('/{id}', ClienteController::class . ':listarPorId'); // GET /cliente/{id}
+    $this->post('', ClienteController::class . ':criar'); // POST /cliente
+    $this->put('/{id}', ClienteController::class . ':atualizar');  // PUT /cliente/{id}
+    $this->delete('/{id}', ClienteController::class . ':deletar'); // DELETE /cliente/{id}
+});

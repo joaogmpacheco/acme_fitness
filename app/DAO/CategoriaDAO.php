@@ -1,15 +1,17 @@
 <?php
 
 namespace App\DAO;
+use App\Database\Connection;
 use App\Model\Categoria;
 use PDO;
 
 class CategoriaDAO {
     private PDO $pdo;
 
-    public function __construct(PDO $pdo) {
-        $this->pdo = $pdo;
+    public function __construct() {
+        $this->pdo = Connection::get();
     }
+
     public function listar(): array {
         $stmt = $this->pdo->query("SELECT * FROM categoria");
         $categoria = [];
@@ -46,7 +48,7 @@ class CategoriaDAO {
         return $stmt->execute([
             ':nome' => $categoria->getNome(),
             ':descricao' => $categoria->getDescricao(),
-            ':id' => $categoria->getId(), // <-- necessário
+
         ]);
     }
 
