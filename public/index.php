@@ -15,28 +15,25 @@ require __DIR__ . '/../vendor/autoload.php';
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
-if (false) { // Should be set to true in production
-	$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
-}
-
-// Set up settings
+// Settings
 $settings = require __DIR__ . '/../app/settings.php';
 $settings($containerBuilder);
 
-// Set up dependencies
+// Dependencies (incluindo registro do PDO, DAOs, Services, Controllers)
 $dependencies = require __DIR__ . '/../app/dependencies.php';
 $dependencies($containerBuilder);
 
-// Set up repositories
+// Repositories (se usar, ou remova se não precisar)
 $repositories = require __DIR__ . '/../app/repositories.php';
 $repositories($containerBuilder);
 
-// Build PHP-DI Container instance
+// Build container
 $container = $containerBuilder->build();
 
-// Instantiate the app
+// Set container to AppFactory **antes** de criar o app
 AppFactory::setContainer($container);
 $app = AppFactory::create();
+
 $callableResolver = $app->getCallableResolver();
 
 // Register middleware
@@ -54,7 +51,6 @@ $middleware($app);
 (require __DIR__ . '/../app/routes/variacaoProduto.php')($app);
 (require __DIR__ . '/../app/routes/venda.php')($app);
 
-
 /** @var SettingsInterface $settings */
 $settings = $container->get(SettingsInterface::class);
 
@@ -62,19 +58,18 @@ $displayErrorDetails = $settings->get('displayErrorDetails');
 $logError = $settings->get('logError');
 $logErrorDetails = $settings->get('logErrorDetails');
 
-// Create Request object from globals
+// Create ServerRequest from globals
 $serverRequestCreator = ServerRequestCreatorFactory::create();
 $request = $serverRequestCreator->createServerRequestFromGlobals();
 
-// Create Error Handler
+// Create error handler & shutdown handler
 $responseFactory = $app->getResponseFactory();
 $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
 
-// Create Shutdown Handler
 $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);
 register_shutdown_function($shutdownHandler);
 
-// Add Routing Middleware
+// Add Routing Middleware (must be before BodyParsing & ErrorMiddleware)
 $app->addRoutingMiddleware();
 
 // Add Body Parsing Middleware
@@ -84,7 +79,7 @@ $app->addBodyParsingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, $logError, $logErrorDetails);
 $errorMiddleware->setDefaultErrorHandler($errorHandler);
 
-// Run App & Emit Response
+// Run app & emit response
 $response = $app->handle($request);
 $responseEmitter = new ResponseEmitter();
 $responseEmitter->emit($response);
