@@ -56,7 +56,8 @@ try {
         'routes/itemVenda.php',
         'routes/produto.php',
         'routes/variacaoProduto.php',
-        'routes/venda.php'
+        'routes/venda.php',
+        'Application/Handler/HttpErrorHandler.php'
     ];
 
     foreach ($routeFiles as $routeFile) {
