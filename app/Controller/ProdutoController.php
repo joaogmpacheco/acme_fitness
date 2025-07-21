@@ -19,7 +19,6 @@ class ProdutoController {
         $response->getBody()->write(json_encode($produto));
         return $response->withHeader('Content-Type', 'application/json');
     }
-
     public function buscarPorId(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
         $produto = $this->produtoService->listarPorId($id);
