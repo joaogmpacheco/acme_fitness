@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Service;
 
 use App\DAO\VariacaoProdutoDAO;
@@ -8,8 +7,8 @@ use App\Model\VariacaoProduto;
 class VariacaoProdutoService {
     private VariacaoProdutoDAO $dao;
 
-    public function __construct() {
-        $this->dao = new VariacaoProdutoDAO();
+    public function __construct(VariacaoProdutoDAO $dao) {
+        $this->dao = $dao;
     }
 
     public function listar(): array {
@@ -27,7 +26,7 @@ class VariacaoProdutoService {
 
     public function atualizar(int $id, array $data): bool {
         $variacaoProduto = new VariacaoProduto($data);
-        $variacaoProduto->setId($id); // garante que o ID esteja setado
+        $variacaoProduto->setId($id);
         return $this->dao->atualizar($variacaoProduto);
     }
 
@@ -35,3 +34,4 @@ class VariacaoProdutoService {
         return $this->dao->deletar($id);
     }
 }
+
