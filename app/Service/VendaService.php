@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Service;
 
 use App\DAO\VendaDAO;
@@ -8,8 +7,8 @@ use App\Model\Venda;
 class VendaService {
     private VendaDAO $dao;
 
-    public function __construct() {
-        $this->dao = new VendaDAO();
+    public function __construct(VendaDAO $dao) {
+        $this->dao = $dao;
     }
 
     public function listar(): array {
@@ -27,7 +26,7 @@ class VendaService {
 
     public function atualizar(int $id, array $data): bool {
         $venda = new Venda($data);
-        $venda->setId($id); // garante que o ID esteja setado
+        $venda->setId($id);
         return $this->dao->atualizar($venda);
     }
 
@@ -35,3 +34,4 @@ class VendaService {
         return $this->dao->deletar($id);
     }
 }
+
